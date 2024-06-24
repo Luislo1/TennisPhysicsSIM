@@ -4,9 +4,14 @@ package functionalities;
 
 public class Vector3D {
 
-	public double _x;
-	public double _y;
-	public double _z;
+	private double _x;
+	private double _y;
+	private double _z;
+	
+	private float _magnitude;
+	
+	private double _theta;
+	private double _phi;
 
 	// create the zero vector
 	public Vector3D() {
@@ -26,6 +31,24 @@ public class Vector3D {
 		_y = y;
 		_z = z;
 	}
+	
+	 public Vector3D(float magnitude, double theta, double phi) {
+	        // Convert angles to radians
+	        double thetaRad = Math.toRadians(theta);
+	        double phiRad = Math.toRadians(phi);
+
+	        // Calculate the components
+	        this._x = magnitude * Math.sin(thetaRad) * Math.cos(phiRad);
+	        this._y = magnitude * Math.sin(thetaRad) * Math.sin(phiRad);
+	        this._z = magnitude * Math.cos(thetaRad);
+	        
+	        this._magnitude=magnitude;
+	        
+	        this._theta=theta;
+	        this._phi=phi;
+	 }
+	 
+	 
 
 	// return the inner product of this Vector a and b
 	public double dot(Vector3D that) {
@@ -33,13 +56,13 @@ public class Vector3D {
 	}
 
 	// return the length of the vector
-	public double magnitude() {
+	public double module() {
 		return Math.sqrt(dot(this));
 	}
 
 	// return the distance between this and that
 	public double distanceTo(Vector3D that) {
-		return minus(that).magnitude();
+		return minus(that).module();
 	}
 
 	// create and return a new object whose value is (this + that)
@@ -71,8 +94,8 @@ public class Vector3D {
 
 	// return the corresponding unit vector
 	public Vector3D direction() {
-		if (magnitude() > 0.0)
-			return scale(1.0 / magnitude());
+		if (module() > 0.0)
+			return scale(1.0 / module());
 		else
 			return new Vector3D(this);
 	}
@@ -129,8 +152,8 @@ public class Vector3D {
 	
 	 public double angle(Vector3D v) {
 	        double dot = this.dot(v);
-	        double magnitude1 = this.magnitude();
-	        double magnitude2 = v.magnitude();
+	        double magnitude1 = this.module();
+	        double magnitude2 = v.module();
 	        double cosine = dot / (magnitude1 * magnitude2);
 
 	        // Clamp cosine to the range [-1, 1] to avoid numerical issues
@@ -141,8 +164,22 @@ public class Vector3D {
 	        }
 
 	        double angle = Math.acos(cosine);
-	        return angle * 180.0 / Math.PI;
-	    }
+	        return (angle * 180.0 / Math.PI);
+    }
+	 
+	 public double angleHorizontal() {
+		 double cosine = (this._x*_x) / (Math.abs(this._x) * Math.sqrt(_x*_x + _y*_y));
+
+        // Clamp cosine to the range [-1, 1] to avoid numerical issues
+        if (cosine < -1.0) {
+            cosine = -1.0;
+        } else if (cosine > 1.0) {
+            cosine = 1.0;
+        }
+
+        double angle = Math.acos(cosine);
+		 return (angle * 180.0 / Math.PI);
+	 }
 	
 	/*public JSONArray asJSONArray() {
 		JSONArray a = new JSONArray();
@@ -185,6 +222,54 @@ public class Vector3D {
 	// return a string representation of the vector
 	public String toString() {
 		return "[" + _x + "," + _y + ","+ _z + "]";
+	}
+
+	public double get_x() {
+		return _x;
+	}
+
+	public double get_y() {
+		return _y;
+	}
+
+	public double get_z() {
+		return _z;
+	}
+
+	public float get_magnitude() {
+		return _magnitude;
+	}
+
+	public double get_theta() {
+		return _theta;
+	}
+
+	public double get_phi() {
+		return _phi;
+	}
+
+	public void set_x(double _x) {
+		this._x = _x;
+	}
+
+	public void set_y(double _y) {
+		this._y = _y;
+	}
+
+	public void set_z(double _z) {
+		this._z = _z;
+	}
+
+	public void set_magnitude(float _magnitude) {
+		this._magnitude = _magnitude;
+	}
+
+	public void set_theta(double _theta) {
+		this._theta = _theta;
+	}
+
+	public void set_phi(double _phi) {
+		this._phi = _phi;
 	}
 
 }

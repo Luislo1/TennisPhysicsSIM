@@ -34,9 +34,9 @@ public class SimulatorRange {
 		vx = 66;
 		System.out.println("Combinations for Vx : " + vx);
 		double vyMin = 0, vyMax = 0;
-		for (int i = 0; i < 30; i++) {
+		for (double i = 0.0; i < 30; i=i+0.25) {
 			vy = (double)-i;
-			for (int j = 0; j < 20; j++) {
+			for (double j = 0; j < 20; j=j+0.25) {
 				vz = (double)-j;
 				serveVelocity = new Vector3D(vx, vy, vz);
 				k = 0;
@@ -53,7 +53,7 @@ public class SimulatorRange {
 						// Check if the ball lands in the service box after the first bounce
 						serveIn = ball.isInServiceBox(serviceBoxXMin, serviceBoxXMax, serviceBoxYMin, serviceBoxYMax);
 						if (serveIn) {
-							System.out.println("Vy: " + vy + " Vz: " + vz);
+							System.out.println("Vy: " + vy + " Vz: " + vz + " Angulo: " + serveVelocity.angleHorizontal());
 							//System.out.println("Vz: " + vz);
 							//System.out.println("Step : " + k + " - " + ball);
 							//System.out.println("Serve is in!");

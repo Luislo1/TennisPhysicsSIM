@@ -43,16 +43,16 @@ public class Ball {
 	    }
 
 	    public boolean checkBounce(double groundHeight) {
-	        if ((previousPosition._z > groundHeight && position._z <= groundHeight) ||
-	            (previousPosition._z < groundHeight && position._z >= groundHeight)) {
+	        if ((previousPosition.get_z() > groundHeight && position.get_z() <= groundHeight) ||
+	            (previousPosition.get_z() < groundHeight && position.get_z() >= groundHeight)) {
 	            // Interpolate to find the exact point where z = groundHeight
-	            double t = (groundHeight - previousPosition._z) / (position._z - previousPosition._z);
-	            double xAtGround = previousPosition._x + t * (position._x - previousPosition._x);
-	            double yAtGround = previousPosition._y + t * (position._y - previousPosition._y);
+	            double t = (groundHeight - previousPosition.get_z()) / (position.get_z() - previousPosition.get_z());
+	            double xAtGround = previousPosition.get_x() + t * (position.get_x() - previousPosition.get_x());
+	            double yAtGround = previousPosition.get_y() + t * (position.get_y() - previousPosition.get_y());
 	            position = new Vector3D(xAtGround, yAtGround, groundHeight); // Update position to ground level
 
 	            // Reverse vertical velocity to simulate bounce
-	            velocity._z = -velocity._z;
+	            velocity.set_z(-velocity.get_z());
 	            hasBounced = true;
 	            return true;
 	        }
@@ -61,9 +61,9 @@ public class Ball {
 
 	    public boolean checkNetCollision(double netHeight) {
 	        // Check if the ball crossed the net plane (x=0) between the last position and current position
-	        if ((previousPosition._x < 0 && position._x >= 0) || (previousPosition._x > 0 && position._x <= 0)) {
+	        if ((previousPosition.get_x() < 0 && position.get_x() >= 0) || (previousPosition.get_x() > 0 && position.get_x() <= 0)) {
 	            // Check if the ball's z-coordinate is below the net height at the net plane
-	            double zAtNet = previousPosition._z + (position._z - previousPosition._z) * (0 - previousPosition._x) / (position._x - previousPosition._x);
+	            double zAtNet = previousPosition.get_z() + (position.get_z() - previousPosition.get_z()) * (0 - previousPosition.get_x()) / (position.get_x() - previousPosition.get_x());
 	            if (zAtNet <= netHeight) {
 	                return true; // Ball hits the net
 	            }
@@ -72,7 +72,7 @@ public class Ball {
 	    }
 
 	    public boolean isInServiceBox(double xMin, double xMax, double yMin, double yMax) {
-	        return position._x >= xMin && position._x <= xMax && position._y >= yMin && position._y <= yMax;
+	        return position.get_x() >= xMin && position.get_x() <= xMax && position.get_y() >= yMin && position.get_y() <= yMax;
 	    }
 
 	    public boolean hasBounced() {
