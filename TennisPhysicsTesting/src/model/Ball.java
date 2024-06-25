@@ -3,7 +3,7 @@ package model;
 import functionalities.Vector3D;
 
 public class Ball {
-	 private Vector3D position;
+		private Vector3D position;
 	    private Vector3D previousPosition;
 	    private Vector3D velocity;
 	    private Vector3D acceleration;

@@ -25,7 +25,7 @@ public class SimulatorAngle {
 		Vector3D servePosition = new Vector3D(-11.5, 0.5, 3); // Serve position (slightly above ground for the serve)
 		
 		double theta=0,phi=0;
-		float v=62;
+		float v=68;
 		Vector3D serveVelocity = new Vector3D(v, theta, phi); // Serve velocity (forward, slightly towards the left service
 															// box, and upwards)
 
@@ -36,10 +36,10 @@ public class SimulatorAngle {
 		int k = 0;
 		System.out.println("Combinations for V : " + v);
 		double vyMin = 0, vyMax = 0;
-		for (double i = 0.0; i < 30; i=i+0.25) {
-			theta = -i;
-			for (double j = 0; j < 20; j=j+0.25) {
-				phi = j;
+		for (double i = 98.0; i < 100; i=i+0.1) {
+			theta = i;
+			for (double j = 0; j < 10; j=j+0.1) {
+				phi = -j;
 				serveVelocity = new Vector3D(v,theta,phi);
 				k = 0;
 				bounce = false;
@@ -55,7 +55,7 @@ public class SimulatorAngle {
 						// Check if the ball lands in the service box after the first bounce
 						serveIn = ball.isInServiceBox(serviceBoxXMin, serviceBoxXMax, serviceBoxYMin, serviceBoxYMax);
 						if (serveIn) {
-							System.out.println("Theta: " + theta + " Phi: " + phi);
+							System.out.println("Theta: " + theta + " Phi: " + phi + " Vx: " + serveVelocity.get_x() + " Vy: " + serveVelocity.get_y() +" Vz: " + serveVelocity.get_z());
 							//System.out.println("Vz: " + vz);
 							//System.out.println("Step : " + k + " - " + ball);
 							//System.out.println("Serve is in!");

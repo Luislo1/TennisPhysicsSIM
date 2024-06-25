@@ -7,9 +7,9 @@ public class Vector3D {
 	private double _x;
 	private double _y;
 	private double _z;
-	
+
 	private float _magnitude;
-	
+
 	private double _theta;
 	private double _phi;
 
@@ -30,29 +30,35 @@ public class Vector3D {
 		_x = x;
 		_y = y;
 		_z = z;
-	}
-	
-	 public Vector3D(float magnitude, double theta, double phi) {
-	        // Convert angles to radians
-	        double thetaRad = Math.toRadians(theta);
-	        double phiRad = Math.toRadians(phi);
+		this._magnitude = (float) Math.sqrt(_x * _x + _y * _y + _z * _z);
+		this._phi = angleHorizontal();
+		this._theta = angleTheta();
+		//this._theta = Math.toDegrees(Math.atan2(_z, Math.sqrt(_x * _x + _y * _y)));
+		//this._phi = Math.toDegrees(Math.atan2(_y, _x));
 
-	        // Calculate the components
-	        this._x = magnitude * Math.sin(thetaRad) * Math.cos(phiRad);
-	        this._y = magnitude * Math.sin(thetaRad) * Math.sin(phiRad);
-	        this._z = magnitude * Math.cos(thetaRad);
-	        
-	        this._magnitude=magnitude;
-	        
-	        this._theta=theta;
-	        this._phi=phi;
-	 }
-	 
-	 
+	}
+
+	public Vector3D(float magnitude, double theta, double phi) {
+		// Convert angles to radians
+		//double thetaRad = Math.toRadians(theta);
+		//double phiRad = Math.toRadians(phi);
+		double thetaRad = theta * Math.PI / 180.0;
+		double phiRad = phi  * Math.PI / 180.0;
+		
+		// Calculate the components
+		this._x = magnitude * Math.sin(thetaRad) * Math.cos(phiRad);
+		this._y = magnitude * Math.sin(thetaRad) * Math.sin(phiRad);
+		this._z = magnitude * Math.cos(thetaRad);
+
+		this._magnitude = magnitude;
+
+		this._theta = theta;
+		this._phi = phi;
+	}
 
 	// return the inner product of this Vector a and b
 	public double dot(Vector3D that) {
-		return _x * that._x + _y * that._y + _z*that._z;
+		return _x * that._x + _y * that._y + _z * that._z;
 	}
 
 	// return the length of the vector
@@ -67,7 +73,7 @@ public class Vector3D {
 
 	// create and return a new object whose value is (this + that)
 	public Vector3D plus(Vector3D that) {
-		return new Vector3D(_x + that._x, _y + that._y, _z+that._z);
+		return new Vector3D(_x + that._x, _y + that._y, _z + that._z);
 	}
 
 	// create and return a new object whose value is (this - that)
@@ -83,13 +89,14 @@ public class Vector3D {
 	public double getY() {
 		return _y;
 	}
+
 	public double getZ() {
 		return _z;
 	}
 
 	// create and return a new object whose value is (this * factor)
 	public Vector3D scale(double factor) {
-		return new Vector3D(_x * factor, _y * factor, _z*factor);
+		return new Vector3D(_x * factor, _y * factor, _z * factor);
 	}
 
 	// return the corresponding unit vector
@@ -101,92 +108,103 @@ public class Vector3D {
 	}
 
 	// rotate a vector by 'alpha' degrees
-	 public Vector3D rotate(double alpha, char axis) {
+	public Vector3D rotate(double alpha, char axis) {
 
-	        assert(alpha >= -180.0 && alpha <= 180.0);
-	        assert(axis == 'x' ||  axis == 'y' ||  axis == 'z');
+		assert (alpha >= -180.0 && alpha <= 180.0);
+		assert (axis == 'x' || axis == 'y' || axis == 'z');
 
-	        double angle = alpha * Math.PI / 180.0;
-	        double sine = Math.sin(angle);
-	        double cosine = Math.cos(angle);
+		double angle = alpha * Math.PI / 180.0;
+		double sine = Math.sin(angle);
+		double cosine = Math.cos(angle);
 
-	        double x = _x;
-	        double y = _y;
-	        double z = _z;
-	        Vector3D r = new Vector3D(0, 0, 0);
+		double x = _x;
+		double y = _y;
+		double z = _z;
+		Vector3D r = new Vector3D(0, 0, 0);
 
-	        switch (axis) {
-	            case 'x':
-	                // Rotation around the x-axis
-	                r._x = x;
-	                r._y = cosine * y + (-sine) * z;
-	                r._z = sine * y + cosine * z;
-	                break;
-	            case 'y':
-	                // Rotation around the y-axis
-	                r._x = cosine * x + sine * z;
-	                r._y = y;
-	                r._z = -sine * x + cosine * z;
-	                break;
-	            case 'z':
-	                // Rotation around the z-axis (similar to your 2D rotation)
-	                r._x = cosine * x + (-sine) * y;
-	                r._y = sine * x + cosine * y;
-	                r._z = z;
-	                break;
-	        }
+		switch (axis) {
+		case 'x':
+			// Rotation around the x-axis
+			r._x = x;
+			r._y = cosine * y + (-sine) * z;
+			r._z = sine * y + cosine * z;
+			break;
+		case 'y':
+			// Rotation around the y-axis
+			r._x = cosine * x + sine * z;
+			r._y = y;
+			r._z = -sine * x + cosine * z;
+			break;
+		case 'z':
+			// Rotation around the z-axis (similar to your 2D rotation)
+			r._x = cosine * x + (-sine) * y;
+			r._y = sine * x + cosine * y;
+			r._z = z;
+			break;
+		}
 
-	        return r;
-	    }
-	
-	// compute the angle 'alpha' between 'this' and 'v', 
+		return r;
+	}
+
+	// compute the angle 'alpha' between 'this' and 'v',
 	// it's such that this.rotate(alpha) equals 'v'
-	/*public double angle(Vector3D v)  {
-		double a2 = Math.atan2(v.getX(), v.getY());
-		double a1 = Math.atan2(_x, _y);
-		double angle = a1 - a2;
-		double K = a1 > a2 ? -2.0 * Math.PI : 2.0 * Math.PI;
-		angle = (Math.abs(K + angle) < Math.abs(angle)) ? K + angle : angle;
-		return angle * 180.0 / Math.PI;
-	}*/
+	/*
+	 * public double angle(Vector3D v) { double a2 = Math.atan2(v.getX(), v.getY());
+	 * double a1 = Math.atan2(_x, _y); double angle = a1 - a2; double K = a1 > a2 ?
+	 * -2.0 * Math.PI : 2.0 * Math.PI; angle = (Math.abs(K + angle) <
+	 * Math.abs(angle)) ? K + angle : angle; return angle * 180.0 / Math.PI; }
+	 */
+
+	public double angle(Vector3D v) {
+		double dot = this.dot(v);
+		double magnitude1 = this.module();
+		double magnitude2 = v.module();
+		double cosine = dot / (magnitude1 * magnitude2);
+
+		// Clamp cosine to the range [-1, 1] to avoid numerical issues
+		if (cosine < -1.0) {
+			cosine = -1.0;
+		} else if (cosine > 1.0) {
+			cosine = 1.0;
+		}
+
+		double angle = Math.acos(cosine);
+		return (angle * 180.0 / Math.PI);
+	}
+
+	public double angleHorizontal() {
+		double cosine = (this._x * _x) / (Math.abs(this._x) * Math.sqrt(_x * _x + _y * _y));
+
+		// Clamp cosine to the range [-1, 1] to avoid numerical issues
+		if (cosine < -1.0) {
+			cosine = -1.0;
+		} else if (cosine > 1.0) {
+			cosine = 1.0;
+		}
+		double angle = Math.acos(cosine);
+		if (_y < 0)
+			angle = -angle;
+		return (angle * 180.0 / Math.PI);
+	}
 	
-	 public double angle(Vector3D v) {
-	        double dot = this.dot(v);
-	        double magnitude1 = this.module();
-	        double magnitude2 = v.module();
-	        double cosine = dot / (magnitude1 * magnitude2);
+	public double angleTheta() {
+		double cosine = (this._z) / module();
+		
+		// Clamp cosine to the range [-1, 1] to avoid numerical issues
+		if (cosine < -1.0) {
+			cosine = -1.0;
+		} else if (cosine > 1.0) {
+			cosine = 1.0;
+		}
 
-	        // Clamp cosine to the range [-1, 1] to avoid numerical issues
-	        if (cosine < -1.0) {
-	            cosine = -1.0;
-	        } else if (cosine > 1.0) {
-	            cosine = 1.0;
-	        }
+		double angle = Math.acos(cosine);
+		return (angle * 180.0 / Math.PI);
+	}
 
-	        double angle = Math.acos(cosine);
-	        return (angle * 180.0 / Math.PI);
-    }
-	 
-	 public double angleHorizontal() {
-		 double cosine = (this._x*_x) / (Math.abs(this._x) * Math.sqrt(_x*_x + _y*_y));
-
-        // Clamp cosine to the range [-1, 1] to avoid numerical issues
-        if (cosine < -1.0) {
-            cosine = -1.0;
-        } else if (cosine > 1.0) {
-            cosine = 1.0;
-        }
-
-        double angle = Math.acos(cosine);
-		 return (angle * 180.0 / Math.PI);
-	 }
-	
-	/*public JSONArray asJSONArray() {
-		JSONArray a = new JSONArray();
-		a.put(_x);
-		a.put(_y);
-		return a;
-	}*/
+	/*
+	 * public JSONArray asJSONArray() { JSONArray a = new JSONArray(); a.put(_x);
+	 * a.put(_y); return a; }
+	 */
 
 	@Override
 	public int hashCode() {
@@ -200,7 +218,6 @@ public class Vector3D {
 		return result;
 	}
 
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -221,7 +238,7 @@ public class Vector3D {
 
 	// return a string representation of the vector
 	public String toString() {
-		return "[" + _x + "," + _y + ","+ _z + "]";
+		return "[" + _x + "," + _y + "," + _z + "]";
 	}
 
 	public double get_x() {

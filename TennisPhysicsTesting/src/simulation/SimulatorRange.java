@@ -31,7 +31,7 @@ public class SimulatorRange {
 		boolean serveIn = false;
 		boolean bounce = false;
 		int k = 0;
-		vx = 66;
+		vx = 65;
 		System.out.println("Combinations for Vx : " + vx);
 		double vyMin = 0, vyMax = 0;
 		for (double i = 0.0; i < 30; i=i+0.25) {
@@ -53,7 +53,7 @@ public class SimulatorRange {
 						// Check if the ball lands in the service box after the first bounce
 						serveIn = ball.isInServiceBox(serviceBoxXMin, serviceBoxXMax, serviceBoxYMin, serviceBoxYMax);
 						if (serveIn) {
-							System.out.println("Vy: " + vy + " Vz: " + vz + " Angulo: " + serveVelocity.angleHorizontal());
+							System.out.println("Vy: " + vy + " Vz: " + vz + " Theta: " + serveVelocity.get_theta() + " Phi " + serveVelocity.get_phi() + " Magnitude " + serveVelocity.get_magnitude());
 							//System.out.println("Vz: " + vz);
 							//System.out.println("Step : " + k + " - " + ball);
 							//System.out.println("Serve is in!");
