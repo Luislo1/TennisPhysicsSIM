@@ -8,7 +8,7 @@ public class Vector3D {
 	private double _y;
 	private double _z;
 
-	private float _magnitude;
+	private double _magnitude;
 
 	private double _theta;
 	private double _phi;
@@ -26,11 +26,11 @@ public class Vector3D {
 	}
 
 	// create a vector from an array
-	public Vector3D(double x, double y, double z) {
+	public Vector3D(double x, double y, double z, boolean soyVector) {
 		_x = x;
 		_y = y;
 		_z = z;
-		this._magnitude = (float) Math.sqrt(_x * _x + _y * _y + _z * _z);
+		this._magnitude = Math.sqrt(_x * _x + _y * _y + _z * _z);
 		this._phi = angleHorizontal();
 		this._theta = angleTheta();
 		//this._theta = Math.toDegrees(Math.atan2(_z, Math.sqrt(_x * _x + _y * _y)));
@@ -38,7 +38,7 @@ public class Vector3D {
 
 	}
 
-	public Vector3D(float magnitude, double theta, double phi) {
+	public Vector3D(double magnitude, double theta, double phi) {
 		// Convert angles to radians
 		//double thetaRad = Math.toRadians(theta);
 		//double phiRad = Math.toRadians(phi);
@@ -73,12 +73,12 @@ public class Vector3D {
 
 	// create and return a new object whose value is (this + that)
 	public Vector3D plus(Vector3D that) {
-		return new Vector3D(_x + that._x, _y + that._y, _z + that._z);
+		return new Vector3D(_x + that._x, _y + that._y, _z + that._z,true);
 	}
 
 	// create and return a new object whose value is (this - that)
 	public Vector3D minus(Vector3D that) {
-		return new Vector3D(_x - that._x, _y - that._y, _z - that._z);
+		return new Vector3D(_x - that._x, _y - that._y, _z - that._z,true);
 	}
 
 	// return the corresponding coordinate
@@ -96,7 +96,7 @@ public class Vector3D {
 
 	// create and return a new object whose value is (this * factor)
 	public Vector3D scale(double factor) {
-		return new Vector3D(_x * factor, _y * factor, _z * factor);
+		return new Vector3D(_x * factor, _y * factor, _z * factor,true);
 	}
 
 	// return the corresponding unit vector
@@ -253,7 +253,7 @@ public class Vector3D {
 		return _z;
 	}
 
-	public float get_magnitude() {
+	public double get_magnitude() {
 		return _magnitude;
 	}
 

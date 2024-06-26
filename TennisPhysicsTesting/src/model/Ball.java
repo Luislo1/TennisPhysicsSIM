@@ -18,8 +18,14 @@ public class Ball {
 	        this.velocity = velocity;
 	        this.acceleration = new Vector3D(0, 0, gravity);
 	    }
+	    
+	    
 
-	    public void setPosition(Vector3D position) {
+	    public Vector3D getPosition() {
+			return position;
+		}
+
+		public void setPosition(Vector3D position) {
 	        this.position = position;
 	    }
 
@@ -49,7 +55,7 @@ public class Ball {
 	            double t = (groundHeight - previousPosition.get_z()) / (position.get_z() - previousPosition.get_z());
 	            double xAtGround = previousPosition.get_x() + t * (position.get_x() - previousPosition.get_x());
 	            double yAtGround = previousPosition.get_y() + t * (position.get_y() - previousPosition.get_y());
-	            position = new Vector3D(xAtGround, yAtGround, groundHeight); // Update position to ground level
+	            position = new Vector3D(xAtGround, yAtGround, groundHeight,true); // Update position to ground level
 
 	            // Reverse vertical velocity to simulate bounce
 	            velocity.set_z(-velocity.get_z());
@@ -70,6 +76,24 @@ public class Ball {
 	        }
 	        return false; // Ball does not hit the net
 	    }
+	    
+	    public boolean checkPlayerDistance(double playerPosX) { //TODO Change name and location of the method
+	        // Check if the ball crossed the net plane (x=0) between the last position and current position
+	        if ((previousPosition.get_x() < playerPosX && position.get_x() >= playerPosX) || (previousPosition.get_x() > playerPosX && position.get_x() <= playerPosX)) {
+	        	// Interpolate to find the exact point where z = groundHeight
+	            double t = (playerPosX - previousPosition.get_x()) / (position.get_x() - previousPosition.get_x());
+	            double zAtGround = previousPosition.get_z() + t * (position.get_z() - previousPosition.get_z());
+	            double yAtGround = previousPosition.get_y() + t * (position.get_y() - previousPosition.get_y());
+	            position = new Vector3D(playerPosX, yAtGround, zAtGround,true); // Update position to ground level
+
+	            return true;
+	        }
+	        return false; // Ball does not hit the net
+	    }
+	    
+	    
+	    
+	    
 
 	    public boolean isInServiceBox(double xMin, double xMax, double yMin, double yMax) {
 	        return position.get_x() >= xMin && position.get_x() <= xMax && position.get_y() >= yMin && position.get_y() <= yMax;
